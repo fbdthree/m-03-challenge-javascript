@@ -30,7 +30,9 @@ console.log(includeSpecial)
 
 // Validate input and make sure at least one chracter type was selected.
 if((passwordLength >= 8 && passwordLength <= 128) && (includeUpper || includeLower || includeNumbers || includeSpecial)) {
-  generatePassword();
+  writePassword(generatePassword());
+  
+  
 } else {
   window.prompt("You have not fulfilled requirements to generate a password.  Please restart program and try again.")
 }
@@ -38,36 +40,39 @@ if((passwordLength >= 8 && passwordLength <= 128) && (includeUpper || includeLow
 function generatePassword() {
   // Create empty string for password.
   var password = "";
+  // Create array for characters to be randomly chosen from  after the requirements for the first 1-4 characters of the password have been satisfied.
   var passwordCharactersArray = [];
   // Go through each flag and include the character if true.  That way at least one requested character is included.  Up to the first four characers
   //  of the password will satify the requiremnts.
   if(includeLower) {
     password += getRandomCharacter(lowerArray);
-    passwordCharactersArray.push(lowerArray);
+    passwordCharactersArray = passwordCharactersArray.concat(lowerArray);
   }
   if(includeUpper) {
     password += getRandomCharacter(upperArray);
-    passwordCharactersArray.push(upperArray);
+    passwordCharactersArray = passwordCharactersArray.concat(upperArray);
   }
   if(includeNumbers) {
     password += getRandomCharacter(numbersArray);
-    passwordCharactersArray.push(numbersArray);
+    passwordCharactersArray = passwordCharactersArray.concat(numbersArray);
   }
   if(includeSpecial) {
     password += getRandomCharacter(specialCharArray);
-    passwordCharactersArray.push(specialCharArray);
+    passwordCharactersArray = passwordCharactersArray.concat(specialCharArray);
   }
   console.log(password)
   console.log(passwordCharactersArray)
 
+  // Get the remaining length of the password.
   var remainingLength = passwordLength - password.length;
   console.log(remainingLength);
 
-  var passwordArray = password.split("");
   for(var i = 0; i < remainingLength; i++) {
-    passwordArray.push(getRandomCharacter[passwordCharactersArray]);
+    password += getRandomCharacter(passwordCharactersArray);
   }
-  console.log(passwordArray);
+  console.log(password);
+
+  return password;
 }
 
 
@@ -80,13 +85,14 @@ function getRandomCharacter(charArray) {
 // Display password in either an alert or write it to page.
 
 // Write password to the #password input
-// function writePassword() {
-//   var password = generatePassword();
-//   var passwordText = document.querySelector("#password");
+function writePassword(password) {
+  
+  var passwordText = document.querySelector("#password");
 
-//   passwordText.value = password;
+  passwordText.value = password;
 
-// }
+}
 
 // Add event listener to generate button
-// generateBtn.addEventListener("click", writePassword);
+generateBtn.addEventListener("click", writePassword);
+
